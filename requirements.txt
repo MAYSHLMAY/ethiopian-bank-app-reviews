@@ -1,0 +1,7 @@
+google-play-scraper
+pandas
+numpy
+python-dateutil
+tqdm
+emoji
+regex
