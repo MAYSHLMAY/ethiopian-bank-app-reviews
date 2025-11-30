@@ -97,7 +97,7 @@ class ReviewPreprocessor:
 if __name__ == "__main__":
     # Initialize preprocessor
     preprocessor = ReviewPreprocessor(
-        input_file="task-1/raw_reviews.csv",
+        input_file="data/raw_reviews.csv",
         output_file="task-1/clean_reviews.csv"
     )
 
