@@ -2,9 +2,9 @@
 
 This repository contains scraping, preprocessing, sentiment analysis, and database engineering tasks for three Ethiopian banks’ mobile apps:
 
-- Commercial Bank of Ethiopia (CBE)
-- Bank of Abyssinia (BOA)
-- Dashen Bank
+* Commercial Bank of Ethiopia (CBE)
+* Bank of Abyssinia (BOA)
+* Dashen Bank
 
 The goal is to analyze customer satisfaction and identify key drivers and pain points in app usage.
 
@@ -12,9 +12,10 @@ The goal is to analyze customer satisfaction and identify key drivers and pain p
 
 ## Folders
 
-- **task-1/**: Scraping and preprocessing scripts  
-- **task-2/**: Sentiment and thematic analysis  
-- **data/**: Raw and cleaned datasets
+* **task-1/**: Scraping and preprocessing scripts
+* **task-2/**: Sentiment and thematic analysis
+* **task-3/**: PostgreSQL database insertion scripts
+* **data/**: Raw and cleaned datasets
 
 ---
 
@@ -22,94 +23,127 @@ The goal is to analyze customer satisfaction and identify key drivers and pain p
 
 See `requirements.txt` for required Python packages. Key dependencies include:
 
-- `pandas`  
-- `google-play-scraper`  
-- `textblob`  
-- `scikit-learn`  
+* `pandas`
+* `google-play-scraper`
+* `textblob`
+* `scikit-learn`
+* `psycopg2-binary`
 
 ---
 
 ## Task 1: Data Collection and Preprocessing
 
 ### Overview
+
 Scrape and clean user reviews from the Google Play Store for three Ethiopian banking apps.
 
 ### Steps Completed
+
 1. **Scraping**
-   - Extracted reviews, ratings, dates, and app names
-   - Minimum ~400 reviews per bank (~1,200 total)
-   - Script: `task-1/playstore_scraper.py`
-   
+
+   * Extracted reviews, ratings, dates, and app names
+   * Minimum ~400 reviews per bank (~1,200 total)
+   * Script: `task-1/playstore_scraper.py`
 2. **Preprocessing**
-   - Remove duplicates
-   - Handle missing data
-   - Normalize dates (YYYY-MM-DD)
-   - Save clean dataset as CSV: `task-1/clean_reviews.csv`
-   - Script: `task-1/preprocessing.py`
+
+   * Removed duplicates
+   * Handled missing data
+   * Normalized dates (YYYY-MM-DD)
+   * Saved clean dataset as CSV: `task-1/clean_reviews.csv`
+   * Script: `task-1/preprocessing.py`
 
 ### KPIs Achieved
-- 1,200+ reviews collected  
-- Clean CSV dataset ready for analysis  
-- Organized Git repo with meaningful commits  
+
+* 1,200+ clean reviews collected
+* Organized Git repo with meaningful commits
 
 ---
 
 ## Task 2: Sentiment Analysis and Thematic Extraction
 
 ### Overview
-Compute sentiment for each review and extract preliminary themes to identify drivers and pain points.
+
+Compute sentiment for each review and extract themes to identify satisfaction drivers and pain points.
 
 ### Pipeline
+
 1. **Load Preprocessed Data**
-   - Input: `task-1/clean_reviews.csv`
-   - Columns: `review_text`, `rating`, `date`, `bank`, `source`
+
+   * Input: `task-1/clean_reviews.csv`
+   * Columns: `review_text`, `rating`, `date`, `bank`, `source`
 
 2. **Sentiment Analysis**
-   - Method: TextBlob polarity scores
-   - Classification: `positive`, `negative`, `neutral`
-   - Output: New column `sentiment` added to the dataframe
 
-3. **Keyword & Theme Extraction (Interim)**
-   - Top recurring keywords extracted per bank using TF-IDF
-   - Preliminary grouping into 2–3 themes per bank:
-     - Example: *Login Issues*, *App Performance*, *Customer Support*
-   - Output CSV: `task-2/reviews_sentiment_themes.csv`  
-     Columns: `review_text`, `rating`, `date`, `bank`, `source`, `sentiment`, `theme(s)`
+   * Method: TextBlob polarity scores
+   * Classification: `positive`, `negative`, `neutral`
+   * Output: `sentiment` column
+
+3. **Keyword & Theme Extraction**
+
+   * Extracted top recurring keywords per bank using TF-IDF
+   * Grouped keywords into multiple themes per bank
+   * Output CSV: `task-2/reviews_sentiment_themes.csv`
 
 ### Usage
-Run the sentiment analysis script:
 
 ```bash
 python task-2/sentiment_analysis.py
-````
-
-This generates a CSV with sentiment labels ready for further visualization and insights.
+```
 
 ### KPIs Achieved
 
-* Sentiment scores computed for all scraped reviews
-* Preliminary keyword extraction and theme grouping completed
+* Sentiment scores computed for all reviews
+* Multiple themes assigned per bank
 * Modular Python pipeline committed to GitHub
 
 ---
 
-## Status (Interim Submission)
+## Task 3: Store Cleaned Data in PostgreSQL
 
-| Task                                | Status              |
-| ----------------------------------- | ------------------- |
-| Task 1 – Scraping & Preprocessing   | ✅ Completed         |
-| Task 2 – Sentiment & Themes         | ⚠ Partial (interim) |
-| Task 3 – PostgreSQL DB              | ⬜ Not started       |
-| Task 4 – Insights & Recommendations | ⬜ Not started       |
+### Overview
+
+Persistently store cleaned and processed review data in PostgreSQL.
+
+### Implementation
+
+* PostgreSQL database: `bank_reviews`
+* Tables created:
+
+  * `banks` (bank_id, bank_name, app_name)
+  * `reviews` (review_id, bank_id, review_text, rating, review_date, sentiment_label, sentiment_score, theme, source)
+* OOP Python insertion script: `task-3/insert_reviews_postgres.py`
+
+  * Loads CSV review data
+  * Maps CSV bank codes to DB IDs
+  * Computes sentiment scores
+  * Inserts multiple themes into `reviews` table
+
+### KPIs Achieved
+
+* PostgreSQL database connection verified
+* > 1,000 reviews inserted into `reviews` table
+* Schema documented and committed to GitHub
 
 ---
 
-## Next Steps
+## Status (Current)
 
-* Complete Task 2 with full thematic analysis
-* Begin Task 3: Store cleaned data in PostgreSQL
-* Prepare preliminary visualizations for interim report
-* Continue modular commits for traceable Git history
+| Task                                | Status        |
+| ----------------------------------- | ------------- |
+| Task 1 – Scraping & Preprocessing   | ✅ Completed   |
+| Task 2 – Sentiment & Themes         | ✅ Completed   |
+| Task 3 – PostgreSQL DB              | ✅ Completed   |
+| Task 4 – Insights & Recommendations | ⬜ Not started |
+
+---
+
+## Next Steps (Task 4)
+
+* Derive actionable insights from sentiment and themes
+* Visualize key trends (Matplotlib, Seaborn)
+* Identify drivers (e.g., fast navigation) and pain points (e.g., crashes) per bank
+* Recommend app improvements based on analysis
+* Prepare final report with plots and recommendations
 
 ---
 
@@ -123,7 +157,6 @@ This generates a CSV with sentiment labels ready for further visualization and i
 ---
 
 **Author:** Mikiyas Dawit
-**Submission:** Week 2 Interim Report – Omega Consultancy Challenge
-**Date:** December 1, 2025
+**Date:** December 2, 2025
 
-```
+---
