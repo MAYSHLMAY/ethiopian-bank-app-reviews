@@ -1,6 +1,3 @@
-Perfect! Here’s a **full, updated README.md** for your **interim submission**, reflecting everything you’ve done for Task 1 and Task 2:
-
-````markdown
 # Ethiopian Bank App Reviews – Week 2 Challenge
 
 This repository contains scraping, preprocessing, sentiment analysis, and database engineering tasks for three Ethiopian banks’ mobile apps:
