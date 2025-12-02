@@ -2,18 +2,16 @@
 
 import psycopg2
 import pandas as pd
-from textblob import TextBlob
 from typing import Optional, Dict
-
 
 class PostgresReviewInserter:
     """
     Inserts bank app reviews from a CSV file into a PostgreSQL database.
 
     Attributes:
-        db_config (dict): Dictionary with PostgreSQL connection parameters.
+        db_config (dict): PostgreSQL connection parameters.
         csv_path (str): Path to the CSV file containing reviews.
-        bank_mapping (dict): Mapping from CSV bank codes to database bank names.
+        bank_mapping (dict): Maps CSV bank codes to DB bank names.
     """
 
     def __init__(self, db_config: Dict[str, str], csv_path: str, bank_mapping: Optional[Dict[str, str]] = None):
@@ -35,12 +33,12 @@ class PostgresReviewInserter:
         print(f"Connected to PostgreSQL database: {self.db_config.get('dbname')}")
 
     def load_csv(self) -> None:
-        """Load CSV reviews into pandas DataFrame."""
+        """Load reviews CSV into pandas DataFrame."""
         self.df = pd.read_csv(self.csv_path)
         print(f"Loaded {len(self.df)} reviews from CSV: {self.csv_path}")
 
     def get_bank_id(self, bank_code: str) -> Optional[int]:
-        """Return bank_id from DB for a CSV bank code."""
+        """Return bank_id from DB for a given CSV bank code."""
         db_bank_name = self.bank_mapping.get(bank_code)
         if not db_bank_name:
             print(f"Skipping unknown bank: {bank_code}")
@@ -53,16 +51,13 @@ class PostgresReviewInserter:
         return result[0]
 
     @staticmethod
-    def compute_sentiment_score(text: str) -> float:
-        """Compute sentiment polarity as a score from -1 to 1."""
-        return TextBlob(text).sentiment.polarity
-
-    @staticmethod
-    def process_theme(theme: str) -> str:
-        """Ensure theme string is valid, default to 'Other'."""
-        if pd.isna(theme) or theme.strip() == '':
+    def process_theme(theme_str: str) -> str:
+        """Clean theme string. Default to 'Other' if empty or NaN."""
+        if pd.isna(theme_str) or str(theme_str).strip() == '':
             return "Other"
-        return theme
+        # Convert list-like string to comma-separated string
+        cleaned = str(theme_str).replace("[", "").replace("]", "").replace("'", "").strip()
+        return cleaned or "Other"
 
     def insert_review_row(self, row: pd.Series) -> bool:
         """Insert a single review row into PostgreSQL."""
@@ -70,8 +65,8 @@ class PostgresReviewInserter:
         if bank_id is None:
             return False
 
-        sentiment_score = self.compute_sentiment_score(row['review_text'])
-        theme = self.process_theme(row.get('theme', 'Other'))
+        sentiment_score = row.get('sentiment_score', 0.0)
+        theme = self.process_theme(row.get('themes', 'Other'))
 
         self.cursor.execute(
             """
@@ -83,8 +78,8 @@ class PostgresReviewInserter:
                 bank_id,
                 row['review_text'],
                 row['rating'],
-                row['date'],  # CSV 'date' → DB 'review_date'
-                row['sentiment'],
+                row.get('date', None),
+                None,  # No sentiment label; DB can allow NULL
                 sentiment_score,
                 theme,
                 row.get('source', 'Google Play')
@@ -128,6 +123,7 @@ if __name__ == "__main__":
         "user": "postgres",
         "password": "1234"
     }
+
     inserter = PostgresReviewInserter(
         db_config=db_config,
         csv_path="task-2/reviews_sentiment_themes.csv"
