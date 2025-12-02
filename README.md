@@ -2,9 +2,9 @@
 
 This repository contains scripts for scraping, preprocessing, sentiment and theme analysis, and database engineering for three Ethiopian banks’ mobile apps:
 
-* **Commercial Bank of Ethiopia (CBE)**
-* **Bank of Abyssinia (BOA)**
-* **Dashen Bank**
+- Commercial Bank of Ethiopia (CBE)
+- Bank of Abyssinia (BOA)
+- Dashen Bank
 
 The goal is to analyze customer satisfaction, identify app usage pain points, and provide actionable insights for improvement.
 
@@ -17,6 +17,7 @@ The goal is to analyze customer satisfaction, identify app usage pain points, an
 | `task-1/`      | Scraping and preprocessing scripts |
 | `task-2/`      | Sentiment and thematic analysis scripts |
 | `task-3/`      | PostgreSQL database insertion scripts |
+| `task-4/`      | Insights, visualizations, and recommendations |
 | `data/`        | Raw and cleaned datasets |
 
 ---
@@ -25,11 +26,11 @@ The goal is to analyze customer satisfaction, identify app usage pain points, an
 
 Install dependencies via `requirements.txt`. Key packages include:
 
-* `pandas`
-* `google-play-scraper`
-* `textblob`
-* `scikit-learn`
-* `psycopg2-binary`
+- `pandas`
+- `google-play-scraper`
+- `textblob`
+- `scikit-learn`
+- `psycopg2-binary`
 
 ---
 
@@ -47,7 +48,7 @@ The analysis follows five main stages:
 
 ## Task 1: Data Collection and Preprocessing
 
-* **Scripts:** `task-1/playstore_scraper.py`, `task-1/preprocessing.py`
+* **Scripts:** `task-1/scrape_reviews.py`, `task-1/preprocessing.py`
 * **Steps Completed:**
   - Scrape ~400 reviews per bank (~1,200 total)
   - Remove duplicates and handle missing data
@@ -64,9 +65,9 @@ The analysis follows five main stages:
   1. Load preprocessed CSV
   2. Compute sentiment polarity via TextBlob
   3. Classify as `positive`, `neutral`, or `negative`
-  4. Extract top keywords using TF-IDF and group into themes
+  4. Extract top keywords using TF-IDF and group into preliminary themes
 * **Output:** `task-2/reviews_sentiment_themes.csv`
-* **KPIs Achieved:** All reviews scored, multiple themes assigned, modular pipeline ready
+* **KPIs Achieved:** All reviews scored, preliminary themes assigned, modular pipeline ready
 
 ---
 
@@ -84,12 +85,33 @@ The analysis follows five main stages:
 
 ---
 
-## Task 4: Insights & Recommendations (Next Steps)
+## Task 4: Insights & Recommendations (Preliminary)
 
-* Visualize sentiment and theme trends (Matplotlib/Seaborn)
-* Identify satisfaction drivers and pain points per bank
-* Recommend app improvements
-* Generate final report with plots and actionable insights
+* **Script:** `task-4/analyze_reviews.py`
+* **Data:** `task-4/data/bank_review_summary.csv`
+
+### Plots
+
+#### 1. Rating vs Sentiment Heatmap
+![Rating-Sentiment Heatmap](task-4/plots/rating_sentiment_heatmap.png)
+
+#### 2. Review Timeseries
+![Review Timeseries](task-4/plots/review_timeseries.png)
+
+#### 3. Sentiment Distribution
+![Sentiment Distribution](task-4/plots/sentiment_distribution.png)
+
+#### 4. Theme Distribution
+![Theme Distribution](task-4/plots/theme_distribution.png)
+
+#### 5. Theme-Sentiment Heatmap
+![Theme-Sentiment Heatmap](task-4/plots/theme_sentiment_heatmap.png)
+
+### Next Steps
+- Aggregate statistics per bank
+- Identify key drivers (e.g., fast navigation) and pain points (e.g., app crashes)
+- Complete Task 4 report with insights and recommendations
+- Finalize GitHub repo and prepare final report
 
 ---
 
