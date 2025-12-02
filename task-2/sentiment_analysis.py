@@ -100,7 +100,6 @@ class SentimentAnalyzer:
         self.df.to_csv(self.output_file, index=False)
         print(f"Sentiment & theme results saved to {self.output_file}")
 
-
 if __name__ == "__main__":
     analyzer = SentimentAnalyzer(
         input_file='task-1/clean_reviews.csv',
