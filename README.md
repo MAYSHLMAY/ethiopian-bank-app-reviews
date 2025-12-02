@@ -90,6 +90,28 @@ The analysis follows five main stages:
 * **Script:** `task-4/analyze_reviews.py`
 * **Data:** `task-4/data/bank_review_summary.csv`
 
+### Narrative Insights
+- **CBE**: Users report slow transfers and occasional login failures.
+  - Drivers: Fast navigation, responsive UI in positive reviews
+  - Pain Points: Slow transfers, login issues
+  - Recommendations: Optimize transfer APIs, improve login stability, maintain responsive UI
+
+- **BOA**: Frequent complaints about login errors and app crashes.
+  - Drivers: Good customer support responses
+  - Pain Points: Login errors, app crashes
+  - Recommendations: Enhance app stability, fix crash bugs, improve authentication flow
+
+- **Dashen**: UI and performance mixed feedback.
+  - Drivers: Clear interface, fast navigation
+  - Pain Points: Some performance lag, occasional crashes
+  - Recommendations: Optimize app performance, fix crash hotspots
+
+### Verification Queries
+- Review counts per bank verified
+- Average ratings per bank verified
+- Ensures database integrity for downstream analysis
+
+
 ### Plots
 
 #### 1. Rating vs Sentiment Heatmap
