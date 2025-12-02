@@ -95,8 +95,14 @@ class SentimentAnalyzer:
         """
         if self.df is None:
             raise ValueError("Data not loaded. Call load_data() first.")
+        
+        # Include original 'date' column as 'review_date'
+        if 'date' in self.df.columns:
+            self.df.rename(columns={'date': 'review_date'}, inplace=True)
+        
         self.df.to_csv(self.output_file, index=False)
         print(f"Sentiment & theme results saved to {self.output_file}")
+
 
 
 if __name__ == "__main__":
